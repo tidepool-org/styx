@@ -1,0 +1,39 @@
+{
+  "name": "styx",
+  "version": "0.0.1",
+  "description": "Router",
+  "keywords": [
+    "routing", "front-tier", "API"
+  ],
+  "homepage": "https://github.com/tidepool-org/styx",
+  "repository": "https://github.com/tidepool-org/styx.git",
+  "bugs": "https://github.com/tidepool-org/styx/issues",
+  "license": "BSD-2-clause",
+  "author": {
+    "name": "Eric Tschetter",
+    "email": "cheddar@tidepool.org",
+    "url": "https://github.com/cheddar"
+  },
+  "contributors": [],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/charon.js",
+  "dependencies": {
+    "async": "0.2.9",
+    "bunyan": "0.22.1",
+    "lodash": "2.4.1",
+    "hakken": "tidepool-org/hakken",
+    "http-proxy": "tidepool-org/node-http-proxy#v1.0.0-tp-2"
+  },
+  "devDependencies": {
+    "chai": "1.8.1",
+    "grunt-mocha-test": "0.8.1",
+    "mocha": "1.16.2",
+    "restify": "2.6.1",
+    "sinon": "1.7.3",
+    "sinon-chai": "2.4.0",
+    "superagent": "0.15.7",
+    "supertest": "0.8.2"
+  }
+}
