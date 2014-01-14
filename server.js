@@ -37,11 +37,11 @@
   var rules = ruleBuilder.buildAll(config.rules);
   var server = styx.makeServer(rules);
 
-  if (config.http_port != null) {
-    server.withHttp(config.http_port);
+  if (config.httpPort != null) {
+    server.withHttp(config.httpPort);
   }
-  if (config.https_port != null) {
-    server.withHttps(config.https_port, { pfx: config.https_cert});
+  if (config.httpsPort != null) {
+    server.withHttps(config.httpsPort, config.httpsConfig);
   }
   lifecycle.add(server);
 

@@ -31,18 +31,19 @@ module.exports = (function(){
   var env = {};
 
   // The port to attach an HTTP listener, if null, no HTTP listener will be attached
-  env.http_port = config.fromEnvironment('HTTP_PORT', null);
+  env.httpPort = config.fromEnvironment('HTTP_PORT', null);
 
   // The port to attach an HTTPS listener, if null, no HTTPS listener will be attached
-  env.https_port = config.fromEnvironment('HTTPS_PORT', null);
+  env.httpsPort = config.fromEnvironment('HTTPS_PORT', null);
 
-  // The https certificate to use.  This should be a single, .pfx file.
-  env.https_cert = config.fromEnvironment('HTTPS_CERTIFICATE', null);
-  if (env.https_port != null && env.https_cert == null) {
-    throw except.ISE('Configured to use https, but no certificate set, please set HTTPS_CERTIFICATE');
+  // The https config to pass along to https.createServer.
+  var theConfig = config.fromEnvironment('HTTPS_CONFIG', null);
+  env.httpsConfig = null;
+  if (theConfig != null) {
+    env.httpsConfig = JSON.parse(theConfig);
   }
-  if (env.https_cert.substr(env.https_cert.length - 4) !== '.pfx') {
-    throw except.ISE('https certificate should be a single .pfx file, got[%s]', env.https_cert);
+  if (env.httpsPort != null && env.httpsConfig == null) {
+    throw except.ISE('No https config provided, please set HTTPS_CONFIG with at least the certificate to use.');
   }
 
   // A JSON object of domain -> JSON Array of rules.  Domains ignore case and must be exact.
@@ -50,7 +51,7 @@ module.exports = (function(){
   //
   // The rules are applied by first taking the value of the Host: header, looking up the correct
   // set of rules for the specific host and then running through the rules until it finds a rule
-  // that covers the request.  The request is then delegated to that rule and styx forgets about it.
+  // that covers the request.  The request is then completely delegated to that rule.
   env.rules = JSON.parse(config.fromEnvironment('RULES'));
 
   return env;
