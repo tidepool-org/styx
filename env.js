@@ -59,7 +59,6 @@ module.exports = (function(){
     throw except.ISE('No https config provided, please set HTTPS_CONFIG with at least the certificate to use.');
   }
 
-
   // A JSON object of domain -> JSON Array of rules.  Domains ignore case and must be exact.
   // The domain "*" is a catchall for everything that didn't match a specific domain.
   //
@@ -67,6 +66,9 @@ module.exports = (function(){
   // set of rules for the specific host and then running through the rules until it finds a rule
   // that covers the request.  The request is then completely delegated to that rule.
   env.rules = JSON.parse(config.fromEnvironment('RULES'));
+
+  // A JSON object of discovery configuration.  This is a straight passthru to hakken's config
+  env.discovery = JSON.parse(config.fromEnvironment('DISCOVERY'));
 
   return env;
 })();
