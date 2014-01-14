@@ -23,7 +23,7 @@
     "async": "0.2.9",
     "bunyan": "0.22.1",
     "lodash": "2.4.1",
-    "hakken": "tidepool-org/hakken",
+    "hakken": "0.0.3",
     "http-proxy": "tidepool-org/node-http-proxy#v1.0.0-tp-2"
   },
   "devDependencies": {
