@@ -24,8 +24,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+var fs = require('fs');
+
 var config = require('./lib/common/config.js');
 var except = require('./lib/common/except.js');
+
+function maybeReplaceWithContentsOfFile(obj, field)
+{
+  var potentialFile = obj[field];
+  if (potentialFile != null && fs.existsSync(potentialFile)) {
+    obj[field] = fs.readFileSync(potentialFile).toString();
+  }
+}
 
 module.exports = (function(){
   var env = {};
@@ -41,10 +51,14 @@ module.exports = (function(){
   env.httpsConfig = null;
   if (theConfig != null) {
     env.httpsConfig = JSON.parse(theConfig);
+    maybeReplaceWithContentsOfFile(env.httpsConfig, 'key');
+    maybeReplaceWithContentsOfFile(env.httpsConfig, 'cert');
+    maybeReplaceWithContentsOfFile(env.httpsConfig, 'pfx');
   }
   if (env.httpsPort != null && env.httpsConfig == null) {
     throw except.ISE('No https config provided, please set HTTPS_CONFIG with at least the certificate to use.');
   }
+
 
   // A JSON object of domain -> JSON Array of rules.  Domains ignore case and must be exact.
   // The domain "*" is a catchall for everything that didn't match a specific domain.
