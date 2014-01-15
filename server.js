@@ -33,7 +33,7 @@
   lifecycle.add('hakken', hakken);
 
   var styx = require('./lib/styx.js')();
-  var ruleBuilder = styx.makeRuleBuilder(hakken, proxy);
+  var ruleBuilder = styx.makeRuleBuilder(lifecycle, hakken, proxy);
   var rules = ruleBuilder.buildAll(config.rules);
   var server = styx.makeServer(rules);
 

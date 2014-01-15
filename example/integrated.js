@@ -90,7 +90,7 @@ function makeServer(hakken, port, replyString) {
     var styx = require('../lib/styx.js')();
     var styxHakkenClient = hakken.client.make();
     lifecycle.add('styxHakkenClient', styxHakkenClient);
-    var ruleBuilder = styx.makeRuleBuilder(styxHakkenClient, require('http-proxy').createProxyServer({}));
+    var ruleBuilder = styx.makeRuleBuilder(lifecycle, styxHakkenClient, require('http-proxy').createProxyServer({}));
     var styxServer = styx.makeServer(
       ruleBuilder.buildAll({ 'localhost:21003' : [{service: 'integration', wrappers: [{fn: 'random'}]}]})
     );
