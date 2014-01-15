@@ -43,7 +43,7 @@
   if (config.httpsPort != null) {
     server.withHttps(config.httpsPort, config.httpsConfig);
   }
-  lifecycle.add(server);
+  lifecycle.add('server', server);
 
   lifecycle.start();
   lifecycle.join();
