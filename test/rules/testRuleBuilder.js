@@ -73,7 +73,7 @@ describe('ruleBuilder.js', function(){
       expect(lifecycle.add).to.have.been.calledOnce;
       expect(lifecycle.add).to.have.been.calledWith('billy', sinon.match.object);
 
-      expect(rules['id'][0].handle({ path: '/billy/says/to/love/me' })).is.false;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/billy/says/to/love/me' })).is.false;
     });
   });
 });
