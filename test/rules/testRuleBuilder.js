@@ -42,10 +42,12 @@ describe('ruleBuilder.js', function(){
   });
 
   describe('api compatibility', function(){
-    it('should be able to create a random rule with only a service name', function(){
+    it('should be able to create a random rule', function(){
       sinon.stub(hakken, 'watch').returns({ get: function(){ return ['1234']; }});
       sinon.spy(lifecycle, 'add');
-      var rules = ruleBuilder.buildAll({ id: [{service: 'billy'}]});
+      var rules = ruleBuilder.buildAll(
+        { id: [{type: 'random', service: 'billy'}] }
+      );
 
       expect(rules).to.have.property('id').with.length(1);
       expect(rules['id'][0]).to.have.property('handle').is.a('function');
@@ -55,10 +57,14 @@ describe('ruleBuilder.js', function(){
       expect(lifecycle.add).to.have.been.calledWith('billy', sinon.match.object);
     });
 
-    it('uses wrappers if defined', function(){
+    it('should be able to create a pathPrefix rule', function(){
       sinon.spy(lifecycle, 'add');
       sinon.stub(hakken, 'watch').returns({ get: function(){ return ['1234']; }});
-      var rules = ruleBuilder.buildAll({ id: [{service: 'billy', wrappers: [{fn: 'random'}]}]});
+      var rules = ruleBuilder.buildAll(
+        {
+          id: [{type: 'pathPrefix', prefix: "/howdy", rule: {type: 'random', service: 'billy'}}]
+        }
+      );
 
       expect(rules).to.have.property('id').with.length(1);
       expect(rules['id'][0]).to.have.property('handle').is.a('function');
@@ -66,6 +72,8 @@ describe('ruleBuilder.js', function(){
       expect(hakken.watch).to.have.been.calledWith('billy');
       expect(lifecycle.add).to.have.been.calledOnce;
       expect(lifecycle.add).to.have.been.calledWith('billy', sinon.match.object);
+
+      expect(rules['id'][0].handle({ path: '/billy/says/to/love/me' })).is.false;
     });
   });
 });

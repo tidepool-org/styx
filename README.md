@@ -40,11 +40,12 @@ The basic structure of the `RULES` environment variable should be something like
 ```
 export RULES=\
 {\"myhost.tidepool.io\": [{\
+   \"type\": \"random\",\
    \"service\": \"myhost-prod\"\
  }],\
  \"anotherHost.tidepool.io\": [{\
-   \"service\": \"another-prod\",\
-   \"wrappers\": [{\"fn\": \"random\"}]\
+   \"type\": \"random\",\
+   \"service\": \"another-prod\"\
  }]\
 }
 ```
@@ -53,11 +54,12 @@ This is equivalent to the following JSON, but it must be escaped to allow it to 
 
 ``` json
 {"myhost.tidepool.io": [{
+   "type": "random",
    "service": "myhost-prod"
  }],
  "anotherHost.tidepool.io": [{
-   "service": "another-prod",
-   "wrappers": [{"fn": "random"}]
+   "type": "random",
+   "service": "another-prod"
  }]
 }
 ```
@@ -68,20 +70,27 @@ This set of rules can be interpreted as
 * If the host is `anotherHost.tidepool.io`, then dispatch to a random entry from the hakken watch for service `another-prod`
 * All other requests should receive a 404
 
-So, in summary a rule is essentially two fields
+A rule will always have one field, `type`, which dictates what other fields are possible on that rule.
 
-* `service` - the service name for the hakken watch
-* `wrappers` - an optional list of wrapper configs that are composed on top of the hakken watch.  Wrappers are composed from the right up, so the right-most wrapper will run first, etc.  The types of wrappers are described below.
+* `type` - the type of the ruleservice name for the hakken watch
 
-In general, you will always want to at least specify a random wrapper.  This was not made a default because I am not willing to assume that there won't be a use case for no wrappers.
-
-### Wrappers
-
-These wrappers are actually defined by hakken and thus using a different version of hakken could result in this list having too much or too little.
+### Rules
 
 #### Random
 
-The random wrapper is defined by
+The random rule dispatches to a random service instance.
 
-* `fn`: 'random'
-* `numToPull` - Numerical, optional (default 1), the number of listings to select randomly.  This can be useful for generating random lists of failover nodes
+It takes
+
+* `type`: `'random'`
+* `service`: The service to watch and proxy for
+
+#### Path Prefix
+
+The path prefix rule will delegate to another rule if the path matches a specific prefix.  This can be coupled with
+the random rule to do dispatch based on specific path prefixes.
+
+* `type`: `'pathPrefix'`
+* `prefix`: The prefix that should be proxied
+* `rule`: The rule that should be delegated to if the prefix matches
+* `stripPrefix`: optional (default true), if true, will strip the prefix off of the path before proxying.  Leaves the path alone if false.
