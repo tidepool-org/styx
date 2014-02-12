@@ -28,7 +28,7 @@ Styx configuration is a map of domain to a list of rules.  The protocol for disp
  3) If list of rules for host does not exist, look for list of rules for "host" `*`
  4) If, list of rules does not exist, return 404.
  5) Else, list of rules does exist, "visit" each rule by passing it the request and response
- 6) If a rule returns true, that rule is delegated to and subsequent rules do not run.
+ 6) If a rule returns true, subsequent rules do not run.
  7) If no rule returns true, then a 404 is returned.
 
 The rules follow a JSON grammar, described below.
@@ -76,14 +76,15 @@ A rule will always have one field, `type`, which dictates what other fields are 
 
 ### Rules
 
-#### Random
+#### CORS
 
-The random rule dispatches to a random service instance.
+The cors rule is used to attach cors headers to a specific host.  For OPTIONS requests, it responds and returns true.
+For other requests, it just attaches the specified headers onto the response and returns false.
 
-It takes
+This rule should eventually be extended to allow for the loading of headers from a database based on, e.g., an API key.
 
-* `type`: `'random'`
-* `service`: The service to watch and proxy for
+* `type`: `cors`
+* `headers`: An object of headers that should be attached to responses.
 
 #### Path Prefix
 
@@ -94,3 +95,13 @@ the random rule to do dispatch based on specific path prefixes.
 * `prefix`: The prefix that should be proxied
 * `rule`: The rule that should be delegated to if the prefix matches
 * `stripPrefix`: optional (default true), if true, will strip the prefix off of the path before proxying.  Leaves the path alone if false.
+
+#### Random
+
+The random rule dispatches to a random service instance.
+
+It takes
+
+* `type`: `'random'`
+* `service`: The service to watch and proxy for
+

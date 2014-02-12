@@ -26,8 +26,9 @@
 
 var fs = require('fs');
 
-var config = require('./lib/common/config.js');
-var except = require('./lib/common/except.js');
+var amoeba = require('amoeba');
+var config = amoeba.config;
+var except = amoeba.except;
 
 function maybeReplaceWithContentsOfFile(obj, field)
 {
@@ -69,6 +70,9 @@ module.exports = (function(){
 
   // A JSON object of discovery configuration.  This is a straight passthru to hakken's config
   env.discovery = JSON.parse(config.fromEnvironment('DISCOVERY'));
+
+  // A JSON object of proxying.  This is a straight passthru to http-proxy.createServer()
+  env.proxyConfig = JSON.parse(config.fromEnvironment('PROXY_CONFIG', '{}'));
 
   return env;
 })();
