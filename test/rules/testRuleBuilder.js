@@ -36,8 +36,8 @@ describe('ruleBuilder.js', function(){
   var lifecycle;
   var ruleBuilder;
   beforeEach(function(){
-    hakken = require('hakken')({host: 'localhost:1234'}).client.make();
-    lifecycle = require('../../lib/common/lifecycle.js')();
+    hakken = require('hakken')({host: 'localhost:1234'}).client();
+    lifecycle = require('amoeba').lifecycle();
     ruleBuilder = require('../../lib/rules/ruleBuilder.js')(lifecycle, hakken, proxy);
   });
 

@@ -24,11 +24,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+var _ = require('lodash');
+
 (function () {
   var config = require('./env.js');
-  var lifecycle = require('./lib/common/lifecycle.js')();
-  var hakken = require('hakken')(config.discovery).client.make();
-  var proxy = require('http-proxy').createProxyServer({});
+  var lifecycle = require('amoeba').lifecycle();
+  var hakken = require('hakken')(config.discovery).client();
+
+  // Specify an agent to work around https://github.com/nodejitsu/node-http-proxy/issues/570
+  var proxy = require('http-proxy').createProxyServer(_.assign({}, config.proxyConfig));
 
   lifecycle.add('hakken', hakken);
 

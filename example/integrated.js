@@ -29,10 +29,10 @@ var util = require('util');
 var restify = require('restify');
 var superagent = require('superagent');
 
-var except = require('../lib/common/except.js');
+var except = require('amoeba').except;
 var log = require('../lib/log.js')('example/integrated.js');
 
-var lifecycle = require('../lib/common/lifecycle.js')();
+var lifecycle = require('amoeba').lifecycle();
 
 function makeServer(hakken, port, replyString) {
   var server = restify.createServer({name: 'replyString'});
@@ -84,11 +84,11 @@ function makeServer(hakken, port, replyString) {
     lifecycle.start();
 
     var hakkenServer = lifecycle.add('hakkenServer', hakken.server.makeSimple('localhost', hakkenPort));
-    server1 = makeServer(hakken.client.make(), 21001, 'Billy');
-    server2 = makeServer(hakken.client.make(), 21002, 'Sally');
+    server1 = makeServer(hakken.client(), 21001, 'Billy');
+    server2 = makeServer(hakken.client(), 21002, 'Sally');
 
     var styx = require('../lib/styx.js')();
-    var styxHakkenClient = hakken.client.make();
+    var styxHakkenClient = hakken.client();
     lifecycle.add('styxHakkenClient', styxHakkenClient);
     var ruleBuilder = styx.makeRuleBuilder(lifecycle, styxHakkenClient, require('http-proxy').createProxyServer({}));
     var styxServer = styx.makeServer(
@@ -198,7 +198,7 @@ function makeServer(hakken, port, replyString) {
       if (count >= 10) {
         if (!sawBilly && sawSally) {
           log.info('Worked!  Starting server1 again.');
-          server1 = makeServer(hakken.client.make(), 21001, 'Billy');
+          server1 = makeServer(hakken.client(), 21001, 'Billy');
           setTimeout(bothServers.bind(this, done), 5000);
           return;
         }
