@@ -81,7 +81,7 @@ A rule will always have one field, `type`, which dictates what other fields are 
 The cors rule is used to attach cors headers to a specific host.  For OPTIONS requests, it responds and returns true.
 For other requests, it just attaches the specified headers onto the response and returns false.
 
-This rule should eventually be extended to allow for the loading of headers from a databased based on, e.g., an API key.
+This rule should eventually be extended to allow for the loading of headers from a database based on, e.g., an API key.
 
 * `type`: `cors`
 * `headers`: An object of headers that should be attached to responses.
