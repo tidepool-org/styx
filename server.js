@@ -31,7 +31,6 @@ var _ = require('lodash');
   var lifecycle = require('amoeba').lifecycle();
   var hakken = require('hakken')(config.discovery).client();
 
-  // Specify an agent to work around https://github.com/nodejitsu/node-http-proxy/issues/570
   var proxy = require('http-proxy').createProxyServer(_.assign({}, config.proxyConfig));
 
   lifecycle.add('hakken', hakken);
