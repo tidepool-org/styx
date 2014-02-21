@@ -28,7 +28,6 @@ var fixture = require('../fixture.js');
 
 var expect = fixture.expect;
 var sinon = fixture.sinon;
-var mockableObject = fixture.mockableObject;
 
 describe('ruleBuilder.js', function(){
   var proxy = {};
@@ -74,6 +73,35 @@ describe('ruleBuilder.js', function(){
       expect(lifecycle.add).to.have.been.calledWith('billy', sinon.match.object);
 
       expect(rules['id'][0].handle({ url: 'http://localhost:1234/billy/says/to/love/me' })).is.false;
+    });
+
+    it('should be able to create a cors rule', function(){
+      var rules = ruleBuilder.buildAll(
+        {
+          id: [{type: 'cors', headers: {header1: 'value', header2: 'value2'}}]
+        }
+      );
+
+      expect(rules).to.have.property('id').with.length(1);
+      expect(rules['id'][0]).to.have.property('handle').is.a('function');
+    });
+
+    it('should be able to create a staticService rule', function(){
+      sinon.spy(lifecycle, 'add');
+      sinon.spy(hakken, 'staticWatch');
+      var hosts = [{ protocol: 'https', host: 'billy:1234' }];
+      var rules = ruleBuilder.buildAll(
+        {
+          id: [{type: 'staticService', hosts: hosts}]
+        }
+      );
+
+      expect(rules).to.have.property('id').with.length(1);
+      expect(rules['id'][0]).to.have.property('handle').is.a('function');
+      expect(hakken.staticWatch).to.have.been.calledOnce;
+      expect(hakken.staticWatch).to.have.been.calledWith(hosts);
+      expect(lifecycle.add).to.have.been.calledOnce;
+      expect(lifecycle.add).to.have.been.calledWith('https://billy:1234', sinon.match.object);
     });
   });
 });

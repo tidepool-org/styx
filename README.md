@@ -105,3 +105,12 @@ It takes
 * `type`: `'random'`
 * `service`: The service to watch and proxy for
 
+#### Static Service
+
+The staticService rule dispatches to a static list of hosts provided in the config.
+
+It takes
+
+* `type`: `'staticService'`
+* `hosts`: An array of objects that can be passed into url.format() to generate a host to talk to
+
