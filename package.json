@@ -18,7 +18,9 @@
   },
   "contributors": [],
   "files": [
-    "lib"
+    "lib",
+    "env.js",
+    "server.js"
   ],
   "main": "lib/charon.js",
   "dependencies": {
