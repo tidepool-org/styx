@@ -35,7 +35,7 @@
     "chai": "2.1.0",
     "grunt-mocha-test": "0.12.7",
     "mocha": "2.1.0",
-    "restify": "2.6.1",
+    "restify": "2.8.5",
     "sinon": "1.12.2",
     "sinon-chai": "2.4.0",
     "superagent": "0.21.0",
