@@ -32,7 +32,7 @@
     "http-proxy": "tidepool-org/node-http-proxy#stop-being-stupid-about-agent"
   },
   "devDependencies": {
-    "chai": "1.8.1",
+    "chai": "2.1.0",
     "grunt-mocha-test": "0.8.1",
     "mocha": "1.16.2",
     "restify": "2.6.1",
