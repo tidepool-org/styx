@@ -39,6 +39,6 @@
     "sinon": "1.7.3",
     "sinon-chai": "2.4.0",
     "superagent": "0.15.7",
-    "supertest": "0.8.2"
+    "supertest": "0.15.0"
   }
 }
