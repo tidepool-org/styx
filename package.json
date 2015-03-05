@@ -24,7 +24,7 @@
   ],
   "main": "lib/charon.js",
   "dependencies": {
-    "amoeba": "0.0.3",
+    "amoeba": "0.1.3",
     "async": "0.2.9",
     "bunyan": "0.22.1",
     "hakken": "0.1.6",
