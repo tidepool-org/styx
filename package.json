@@ -27,7 +27,7 @@
     "amoeba": "0.2.1",
     "async": "0.9.0",
     "bunyan": "1.4.0",
-    "hakken": "0.1.7",
+    "hakken": "0.1.8",
     "http-proxy": "1.8.1",
     "lodash": "3.4.0"
   },
