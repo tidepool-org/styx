@@ -41,7 +41,6 @@ RUN apk --no-cache add curl git \
  && apk del git curl
 COPY . /app
 
-VOLUME /app
 USER node
 
 EXPOSE 8009 8010
