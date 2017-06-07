@@ -1,9 +1,11 @@
-#! /bin/bash -eu
+#!/bin/sh -eu
 
 rm -rf node_modules
-npm install .
-./node_modules/.bin/mocha test
-for file in `ls example/*.js`; do
-  echo "RUNNING file[${file}]"
-  node $file
-done;
+
+TIME="$(date +%s)"
+npm install --production
+TIME="$(($(date +%s)-TIME))"
+
+echo "npm install completed in ${TIME} seconds"
+
+npm dedupe

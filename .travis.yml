@@ -1,0 +1,26 @@
+sudo: false
+
+language: node_js
+
+node_js:
+  - 0.12.18
+
+install:
+  - npm install
+
+addons:
+  artifacts:
+    s3_region: us-west-2
+    paths:
+      - $(git ls-files -o deploy/*/*-*.tar.gz | tr "\n" ":")
+    target_paths:
+      - /
+
+script:
+  - npm test
+  - ./artifact.sh
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
