@@ -56,6 +56,25 @@ describe('ruleBuilder.js', function(){
       expect(lifecycle.add).to.have.been.calledWith('billy', sinon.match.object);
     });
 
+    it('should be able to create a pathMatch rule', function(){
+      sinon.spy(lifecycle, 'add');
+      sinon.stub(hakken, 'watch').returns({ get: function(){ return ['1234']; }});
+      var rules = ruleBuilder.buildAll(
+        {
+          id: [{type: 'pathMatch', match: '/v1/oauth', rule: {type: 'random', service: '/v1/oauth'}}]
+        }
+      );
+
+      expect(rules).to.have.property('id').with.length(1);
+      expect(rules['id'][0]).to.have.property('handle').is.a('function');
+      expect(hakken.watch).to.have.been.calledOnce;
+      expect(hakken.watch).to.have.been.calledWith('/v1/oauth');
+      expect(lifecycle.add).to.have.been.calledOnce;
+      expect(lifecycle.add).to.have.been.calledWith('/v1/oauth', sinon.match.object);
+
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/v1/oauth/says/to/love/me' })).is.false;
+    });
+
     it('should be able to create a pathPrefix rule', function(){
       sinon.spy(lifecycle, 'add');
       sinon.stub(hakken, 'watch').returns({ get: function(){ return ['1234']; }});
