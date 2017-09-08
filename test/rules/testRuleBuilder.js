@@ -30,7 +30,7 @@ var expect = fixture.expect;
 var sinon = fixture.sinon;
 
 describe('ruleBuilder.js', function(){
-  var proxy = {};
+  var proxy = { web: function() {} };
   var hakken;
   var lifecycle;
   var ruleBuilder;
@@ -56,6 +56,32 @@ describe('ruleBuilder.js', function(){
       expect(lifecycle.add).to.have.been.calledWith('billy', sinon.match.object);
     });
 
+    it('should be able to create a pathMatch rule', function(){
+      sinon.spy(lifecycle, 'add');
+      sinon.stub(hakken, 'watch').returns({ get: function(){ return ['1234']; }});
+      var rules = ruleBuilder.buildAll(
+        {
+          id: [{type: 'pathMatch', match: '/v1/cars/[0-9]+/tires', rule: {type: 'random', service: 'bob'}}]
+        }
+      );
+
+      expect(rules).to.have.property('id').with.length(1);
+      expect(rules['id'][0]).to.have.property('handle').is.a('function');
+      expect(hakken.watch).to.have.been.calledOnce;
+      expect(hakken.watch).to.have.been.calledWith('bob');
+      expect(lifecycle.add).to.have.been.calledOnce;
+      expect(lifecycle.add).to.have.been.calledWith('bob', sinon.match.object);
+
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/v1/cars/0/tires' })).is.true;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/v1/cars/123456/tires' })).is.true;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/v1/cars/123' })).is.false;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/v1/cars//tires' })).is.false;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/v1/cars/abc/tires' })).is.false;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/v1/cars/123/tires/456' })).is.false;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/v2/cars/123/tires' })).is.false;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/bob' })).is.false;
+    });
+
     it('should be able to create a pathPrefix rule', function(){
       sinon.spy(lifecycle, 'add');
       sinon.stub(hakken, 'watch').returns({ get: function(){ return ['1234']; }});
@@ -72,7 +98,11 @@ describe('ruleBuilder.js', function(){
       expect(lifecycle.add).to.have.been.calledOnce;
       expect(lifecycle.add).to.have.been.calledWith('billy', sinon.match.object);
 
-      expect(rules['id'][0].handle({ url: 'http://localhost:1234/billy/says/to/love/me' })).is.false;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/howdy' })).is.true;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/howdy/there' })).is.true;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/howd' })).is.false;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/not/howdy' })).is.false;
+      expect(rules['id'][0].handle({ url: 'http://localhost:1234/billy' })).is.false;
     });
 
     it('should be able to create a cors rule', function(){
