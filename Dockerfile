@@ -23,8 +23,11 @@ RUN apk --no-cache add curl git \
 # TODO - change more services?
  && curl --remote-name https://raw.githubusercontent.com/tidepool-org/tools/master/styx_rules.json \
  && sed -i -e 's/    "localhost:[0-9]*"/    "*"/' \
-           -e 's/localhost:8077/dataservices:8077/g' \
-           -e 's/localhost:8078/userservices:8078/g' \
+           -e 's/localhost:9220/data:9220/g' \
+           -e 's/localhost:9221/user:9221/g' \
+           -e 's/localhost:9222/auth:9222/g' \
+           -e 's/localhost:9223/notification:9223/g' \
+           -e 's/localhost:9224/task:9224/g' \
            -e 's/localhost:9107/shoreline:9107/g' \
            -e 's/localhost:9119/message-api:9119/g' \
            -e 's/localhost:9120/seagull:9120/g' \
