@@ -16,11 +16,9 @@ addons:
     target_paths:
       - /
 
+services:
+  - docker
+
 script:
   - npm test
   - ./artifact.sh
-
-notifications:
-  email:
-    on_success: change
-    on_failure: always
