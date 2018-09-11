@@ -4,7 +4,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN yarn install
+RUN apk --no-cache update && \
+    apk --no-cache upgrade && \
+    yarn install && \
+    yarn cache clean
 
 USER node
 
